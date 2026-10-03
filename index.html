@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominion Duo Tracker</title>
+<style>
+  :root {
+    --bg: #0c0f14; --panel: #141922; --panel2: #1a212c; --line: #273040;
+    --text: #e8edf4; --muted: #8793a5; --win: #3fd17f; --loss: #ff6b6b; --gold: #f0c04a;
+    --radius: 14px; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--text);
+    background: radial-gradient(1100px 520px at 8% -12%, #1b2434 0, transparent 60%), var(--bg);
+    font: 15px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .app { max-width: 1100px; margin: 0 auto; padding: 18px 18px 48px; display: grid; gap: 14px; }
+
+  .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+  .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; }
+  h1 { margin: 2px 0 0; font-size: 26px; letter-spacing: .01em; }
+  .tools { display: flex; gap: 8px; }
+  .ghost { background: transparent; border: 1px solid var(--line); border-radius: 10px; padding: 7px 12px; color: var(--muted); }
+  .ghost:hover { color: var(--text); border-color: #3a475c; }
+  .banner { background: #3a2a10; border: 1px solid #6b4a14; color: #ffd990; border-radius: 10px; padding: 10px 14px; }
+
+  .panel, .card, .hero { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+
+  .hero { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; padding: 18px 22px; align-items: center; }
+  .rec-nums { font-size: 76px; line-height: 1; font-weight: 700; letter-spacing: -.02em; }
+  .rec-nums .w { color: var(--win); } .rec-nums .l { color: var(--loss); } .rec-nums .dash { color: var(--muted); margin: 0 8px; font-weight: 400; }
+  .rec-label, .kpi .k, .form-label, dt { color: var(--muted); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .kpi .v { font-size: 28px; font-weight: 650; }
+  .form { grid-column: 1 / -1; }
+  .strip { display: flex; gap: 4px; margin-top: 6px; }
+  .strip i { flex: 1; height: 16px; border-radius: 4px; background: var(--panel2); max-width: 40px; }
+  .strip i.W { background: var(--win); } .strip i.L { background: var(--loss); }
+
+  .addrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .big { border: 0; border-radius: var(--radius); padding: 15px; font-size: 20px; font-weight: 700; letter-spacing: .02em; color: #07120b; }
+  .big.win { background: var(--win); } .big.loss { background: var(--loss); color: #1c0707; }
+  .big:hover { filter: brightness(1.08); } .big:active { transform: translateY(1px); }
+  kbd { font: 600 12px/1 ui-monospace, Consolas, monospace; background: rgba(0,0,0,.22); border-radius: 5px; padding: 3px 6px; margin-left: 8px; vertical-align: 3px; }
+
+  .players { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 14px; }
+  .card { padding: 16px 18px; border-top: 3px solid var(--tier, var(--line)); }
+  .card header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .pname { font-size: 20px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .badge { display: inline-flex; align-items: center; background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 13px 5px 11px; font-weight: 650; white-space: nowrap; }
+  .gem { width: 12px; height: 12px; background: var(--tier); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); margin-right: 8px; }
+  .rankline { margin: 8px 0 2px; color: var(--muted); }
+  .rankline b { color: var(--text); font-weight: 600; }
+  .up { color: var(--win); font-weight: 600; } .down { color: var(--loss); font-weight: 600; } .flat { color: var(--muted); }
+  .spark svg { width: 100%; height: auto; max-height: 86px; display: block; margin: 6px 0 10px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 12px; margin: 0; }
+  .stats div { background: var(--panel2); border-radius: 10px; padding: 8px 10px; }
+  dd { margin: 2px 0 0; font-size: 21px; font-weight: 650; }
+
+  .panel { padding: 16px 18px; }
+  .panel h2 { margin: 0 0 10px; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; display: flex; justify-content: space-between; }
+  .teamkpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+
+  .row { display: grid; grid-template-columns: 78px 66px 1fr 1fr 56px; gap: 8px 12px; align-items: center; padding: 10px 6px; border-top: 1px solid var(--line); }
+  .row:first-of-type { border-top: 0; }
+  .row .n b { display: block; } .row .n span { color: var(--muted); font-size: 12px; }
+  .pill { display: inline-block; min-width: 56px; text-align: center; font-weight: 700; font-size: 12px; letter-spacing: .08em; padding: 4px 9px; border-radius: 999px; }
+  .row.win .pill { background: rgba(63,209,127,.16); color: var(--win); } .row.loss .pill { background: rgba(255,107,107,.16); color: var(--loss); }
+  .pl { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: center; min-width: 0; }
+  .nm { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  .zkd b { font-weight: 650; }
+  .chip { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--panel2); color: var(--muted); }
+  .chip.up { background: rgba(63,209,127,.14); color: var(--win); } .chip.down { background: rgba(255,107,107,.14); color: var(--loss); }
+  .edit { background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; color: var(--muted); font-size: 13px; }
+  .edit:hover { color: var(--text); }
+  .empty { color: var(--muted); padding: 10px 2px; }
+
+  dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 16px; padding: 0; width: min(660px, calc(100% - 24px)); }
+  dialog::backdrop { background: rgba(4, 7, 11, .72); }
+  dialog form { padding: 20px 22px; display: grid; gap: 14px; }
+  dialog h2 { margin: 0; font-size: 20px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .seg button { border: 1px solid var(--line); background: var(--panel2); border-radius: 10px; padding: 10px; font-weight: 700; letter-spacing: .05em; }
+  .seg button[aria-pressed="true"][data-res="W"] { background: var(--win); color: #07120b; border-color: var(--win); }
+  .seg button[aria-pressed="true"][data-res="L"] { background: var(--loss); color: #1c0707; border-color: var(--loss); }
+  .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  fieldset { border: 1px solid var(--line); border-radius: 12px; margin: 0; padding: 10px 12px 12px; min-width: 0; }
+  legend { padding: 0 6px; font-weight: 650; }
+  .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  label { display: grid; gap: 4px; font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+  input, select { background: #0e131b; border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px; width: 100%; font-size: 17px; text-transform: none; letter-spacing: 0; color: var(--text); }
+  select { font-size: 15px; }
+  .rk { display: grid; grid-template-columns: 1fr 38px 38px; gap: 6px; align-items: end; margin-top: 10px; }
+  .step { height: 40px; border: 1px solid var(--line); background: var(--panel2); border-radius: 9px; font-size: 20px; line-height: 1; }
+  .step:hover { border-color: var(--gold); }
+  .delta { margin-top: 8px; font-size: 13px; min-height: 18px; }
+  .actions { display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
+  .actions .spacer { flex: 1; }
+  .btn { border: 1px solid var(--line); background: var(--panel2); border-radius: 10px; padding: 9px 16px; font-weight: 600; }
+  .btn.primary { background: var(--gold); color: #1d1503; border-color: var(--gold); }
+  .btn.danger { color: var(--loss); }
+  .sfields { display: grid; gap: 12px; }
+  .srow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  #toast { position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 24px); opacity: 0; pointer-events: none; transition: .18s; background: #222b38; border: 1px solid #3a475c; border-radius: 12px; padding: 10px 14px; display: flex; gap: 14px; align-items: center; z-index: 10; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  #toast button { background: transparent; border: 0; color: var(--gold); font-weight: 700; }
+
+  @media (max-width: 700px) {
+    .hero { grid-template-columns: 1fr; } .kpis, .teamkpis { grid-template-columns: repeat(2, 1fr); }
+    .rec-nums { font-size: 60px; }
+    .row { grid-template-columns: 60px 60px 1fr 52px; }
+    .row .pl:nth-of-type(2) { grid-column: 1 / -1; }
+    .pgrid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { #toast { transition: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="eyebrow">For Honor &middot; Ranked Dominion</div>
+      <h1 id="duoTitle">Duo</h1>
+    </div>
+    <div class="tools">
+      <button class="ghost" id="btnExport" type="button" title="Download a backup of all matches">Export</button>
+      <button class="ghost" id="btnImport" type="button" title="Restore from an exported file">Import</button>
+      <button class="ghost" id="btnSettings" type="button">Settings</button>
+      <input type="file" id="fileImport" accept="application/json,.json" hidden>
+    </div>
+  </header>
+
+  <div class="banner" id="banner" hidden>Browser storage is blocked here, so matches will not survive closing this window. Use Export to keep a copy.</div>
+
+  <section class="hero" id="hero" aria-label="Record"></section>
+
+  <section class="addrow">
+    <button class="big win" id="btnWin" type="button">+ Win<kbd>W</kbd></button>
+    <button class="big loss" id="btnLoss" type="button">+ Loss<kbd>L</kbd></button>
+  </section>
+
+  <section class="players" id="players" aria-label="Players"></section>
+
+  <section class="panel" id="team" aria-label="Team"></section>
+
+  <section class="panel" aria-label="Match history">
+    <h2><span>Match history</span><span id="histCount"></span></h2>
+    <div id="history"></div>
+  </section>
+</div>
+
+<dialog id="matchDlg" aria-labelledby="mdTitle">
+  <form id="matchForm" autocomplete="off">
+    <h2 id="mdTitle">Log match</h2>
+    <div class="seg" role="group" aria-label="Result">
+      <button type="button" data-res="W" aria-pressed="true">WIN</button>
+      <button type="button" data-res="L" aria-pressed="false">LOSS</button>
+    </div>
+    <div class="pgrid" id="mdPlayers"></div>
+    <div class="actions">
+      <button type="button" class="btn danger" id="mdDelete" hidden>Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="mdCancel">Cancel</button>
+      <button type="submit" class="btn primary">Save match</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="settingsDlg" aria-labelledby="stTitle">
+  <form id="settingsForm" autocomplete="off">
+    <h2 id="stTitle">Settings</h2>
+    <div class="sfields" id="stFields"></div>
+    <div class="actions">
+      <button type="button" class="btn danger" id="stClear">Clear all matches</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="stCancel">Cancel</button>
+      <button type="submit" class="btn primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* Games baked into this file by add_game.py, so any view of the page (even a static snapshot that cannot
+   read games.js or save to storage) shows every game. games.js adds live updates on top when it can load. */
+/*FEED_START*/
+window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches":[{"id":"g1win01","ts":1790965776123,"result":"W","stats":[{"z":4,"k":12,"d":4},{"z":2,"k":8,"d":4}],"rank":[15,10]},{"id":"g2win02","ts":1790967276123,"result":"W","stats":[{"z":4,"k":12,"d":3},{"z":4,"k":9,"d":4}],"rank":[16,10]},{"id":"g3win03","ts":1790967940220,"result":"W","stats":[{"z":1,"k":8,"d":4},{"z":3,"k":7,"d":3}],"rank":[17,11]},{"id":"g4loss04","ts":1790968595041,"result":"L","stats":[{"z":3,"k":5,"d":6},{"z":2,"k":3,"d":4}],"rank":[17,11]},{"id":"g5win05","ts":1790969968584,"result":"W","stats":[{"z":3,"k":12,"d":3},{"z":2,"k":9,"d":5}],"rank":[17,11]},{"id":"g6win06","ts":1791068610557,"result":"W","stats":[{"z":2,"k":6,"d":5},{"z":1,"k":7,"d":3}],"rank":[18,11],"rev":1},{"id":"g7win07","ts":1791069415456,"result":"W","stats":[{"z":0,"k":6,"d":4},{"z":3,"k":6,"d":1}],"rank":[18,12]},{"id":"g8win08","ts":1791070368865,"result":"W","stats":[{"z":2,"k":6,"d":7},{"z":3,"k":8,"d":4}],"rank":[19,13]}]};
+/*FEED_END*/
+</script>
+<script>
+(() => {
+  'use strict';
+
+  // Ranked ladder: Bronze..Diamond each have divisions V (lowest) to I (highest), then Master and Grand Master.
+  // Edit here if the game's ladder changes. A rank is stored as its index in LADDER.
+  const KEY = 'fh-dominion-duo-v1';
+  const TIERS = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+  const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
+  const COLORS = { Bronze: '#c9803f', Silver: '#b4bfcc', Gold: '#f0c04a', Platinum: '#5fd4c8', Diamond: '#6db8ff', Master: '#c58bff', 'Grand Master': '#ff7b7b' };
+  const LADDER = [];
+  TIERS.forEach(t => { for (let d = 5; d >= 1; d--) LADDER.push({ tier: t, label: t + ' ' + ROMAN[d], short: t.slice(0, 4) + ' ' + ROMAN[d] }); });
+  LADDER.push({ tier: 'Master', label: 'Master', short: 'Master' }, { tier: 'Grand Master', label: 'Grand Master', short: 'GM' });
+  const MAXR = LADDER.length - 1, PLAT5 = 15, GOLD5 = 10;
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const uid = () => Math.random().toString(36).slice(2, 9);
+  const clampInt = (v, lo, hi) => { v = parseInt(v, 10); if (isNaN(v)) v = 0; return Math.max(lo, Math.min(hi, v)); };
+  const lab = i => LADDER[i].label, shortLab = i => LADDER[i].short, col = i => COLORS[LADDER[i].tier];
+  const f1 = v => (Math.round(v * 10) / 10).toFixed(1);
+
+  // ---------- state ----------
+  let S, undoSnap = null, storageOK = true;
+
+  const okRank = r => Number.isInteger(r) && r >= 0 && r <= MAXR;
+  const validMatch = m => !!(m && typeof m.id === 'string' && (m.result === 'W' || m.result === 'L') && Number.isFinite(m.ts) &&
+    Array.isArray(m.stats) && m.stats.length === 2 && m.stats.every(x => x && [x.z, x.k, x.d].every(Number.isFinite)) &&
+    Array.isArray(m.rank) && m.rank.length === 2 && m.rank.every(okRank));
+  function valid(s) {
+    return !!(s && Array.isArray(s.players) && s.players.length === 2 &&
+      s.players.every(p => p && typeof p.name === 'string' && okRank(p.start)) &&
+      Array.isArray(s.matches) && s.matches.every(validMatch) &&
+      (s.deleted === undefined || (Array.isArray(s.deleted) && s.deleted.every(x => typeof x === 'string'))));
+  }
+  function seed() {
+    // First run: your starting ranks and the first win (ranks unchanged because no rank-up was reported).
+    // The fixed id lets games.js recognise it instead of adding game 1 twice.
+    return { v: 1, players: [{ name: 'You', start: PLAT5 }, { name: 'Duo', start: GOLD5 }], deleted: [],
+      matches: [{ id: 'g1win01', ts: Date.now(), result: 'W', stats: [{ z: 4, k: 12, d: 4 }, { z: 2, k: 8, d: 4 }], rank: [PLAT5, GOLD5] }] };
+  }
+  function load() {
+    try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); if (valid(s)) { s.deleted = s.deleted || []; return s; } } }
+    catch (e) { storageOK = false; }
+    return seed();
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); }
+    catch (e) { storageOK = false; $('banner').hidden = false; }
+  }
+  function snap() { undoSnap = JSON.stringify(S); }
+  function undo() { if (!undoSnap) return; S = JSON.parse(undoSnap); undoSnap = null; save(); render(); toast('Undone'); }
+
+  const beforeRanks = i => i === 0 ? S.players.map(p => p.start) : S.matches[i - 1].rank;
+  const currentRanks = () => S.matches.length ? S.matches[S.matches.length - 1].rank : S.players.map(p => p.start);
+
+  function pstats(j) {
+    let z = 0, k = 0, d = 0, best = 0;
+    S.matches.forEach(m => { const x = m.stats[j]; z += x.z; k += x.k; d += x.d; best = Math.max(best, x.k); });
+    return { n: S.matches.length, z, k, d, best };
+  }
+  const kdText = (k, d) => d ? (k / d).toFixed(2) : (k ? '∞' : '—');
+
+  // ---------- rendering ----------
+  function spark(vals, labels) {
+    const W = 300, H = 64, P = 7, min = Math.min(...vals), max = Math.max(...vals), span = max - min;
+    const x = i => vals.length === 1 ? W / 2 : P + (W - 2 * P) * i / (vals.length - 1);
+    const y = v => span === 0 ? H / 2 : H - P - (H - 2 * P) * ((v - min) / span);
+    const pts = vals.map((v, i) => x(i).toFixed(1) + ',' + y(v).toFixed(1)).join(' ');
+    const dots = vals.map((v, i) => {
+      const c = i === 0 ? '#8793a5' : v > vals[i - 1] ? '#3fd17f' : v < vals[i - 1] ? '#ff6b6b' : '#8793a5';
+      return `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${i === vals.length - 1 ? 5 : 3.2}" fill="${c}"><title>${esc(labels[i])}</title></circle>`;
+    }).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Rank over time"><polyline points="${pts}" fill="none" stroke="#3a475c" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
+  }
+
+  function renderHero() {
+    const ms = S.matches, W = ms.filter(m => m.result === 'W').length, L = ms.length - W, n = ms.length;
+    const wr = n ? Math.round(100 * W / n) + '%' : '—';
+    let streak = '—';
+    if (n) { let c = 1; while (c < n && ms[n - 1 - c].result === ms[n - 1].result) c++; const r = ms[n - 1].result; streak = `<span class="${r === 'W' ? 'up' : 'down'}">${r}${c}</span>`; }
+    const today = new Date().toDateString(), tm = ms.filter(m => new Date(m.ts).toDateString() === today);
+    const tw = tm.filter(m => m.result === 'W').length;
+    const last = ms.slice(-20), pad = 20 - last.length;
+    const strip = '<i></i>'.repeat(pad) + last.map(m => `<i class="${m.result}" title="${m.result === 'W' ? 'Win' : 'Loss'}"></i>`).join('');
+    const kpi = (k, v) => `<div class="kpi"><div class="k">${k}</div><div class="v">${v}</div></div>`;
+    $('hero').innerHTML =
+      `<div><div class="rec-nums"><span class="w">${W}</span><span class="dash">–</span><span class="l">${L}</span></div><div class="rec-label">Record (W–L)</div></div>` +
+      `<div class="kpis">${kpi('Win rate', wr)}${kpi('Streak', streak)}${kpi('Today', tw + '–' + (tm.length - tw))}${kpi('Games', n)}</div>` +
+      `<div class="form"><div class="form-label">${n === 0 ? 'Recent results' : n === 1 ? 'Last result' : 'Last ' + Math.min(n, 20) + ' results (newest right)'}</div><div class="strip">${strip}</div></div>`;
+  }
+
+  function renderPlayers() {
+    const cur = currentRanks();
+    $('players').innerHTML = S.players.map((p, j) => {
+      const st = pstats(j), n = st.n, net = cur[j] - p.start;
+      const series = [p.start, ...S.matches.map(m => m.rank[j])];
+      const labels = ['Start: ' + lab(p.start), ...S.matches.map((m, i) => '#' + (i + 1) + ': ' + lab(m.rank[j]))];
+      const netHtml = net > 0 ? `<span class="up">▲ ${net} step${net > 1 ? 's' : ''} up</span>` : net < 0 ? `<span class="down">▼ ${-net} step${net < -1 ? 's' : ''} down</span>` : `<span class="flat">no net change</span>`;
+      const avg = v => n ? f1(v / n) : '—';
+      const stat = (k, v) => `<div><dt>${k}</dt><dd>${v}</dd></div>`;
+      return `<article class="card" style="--tier:${col(cur[j])}">
+        <header><div class="pname">${esc(p.name)}</div><div class="badge"><i class="gem"></i>${esc(lab(cur[j]))}</div></header>
+        <div class="rankline">Started <b>${esc(lab(p.start))}</b> &middot; ${netHtml}</div>
+        <div class="spark">${spark(series, labels)}</div>
+        <dl class="stats">${stat('Zones/game', avg(st.z))}${stat('Kills/game', avg(st.k))}${stat('Deaths/game', avg(st.d))}${stat('K/D', kdText(st.k, st.d))}${stat('Best kills', n ? st.best : '—')}${stat('Games', n)}</dl>
+      </article>`;
+    }).join('');
+  }
+
+  function renderTeam() {
+    const a = pstats(0), b = pstats(1), n = a.n, k = a.k + b.k, d = a.d + b.d, z = a.z + b.z;
+    const cur = currentRanks(), net = cur.reduce((s, r, j) => s + r - S.players[j].start, 0);
+    const kpi = (t, v) => `<div class="kpi"><div class="k">${t}</div><div class="v">${v}</div></div>`;
+    $('team').innerHTML = `<h2><span>Duo combined</span></h2><div class="teamkpis">${kpi('Team K/D', kdText(k, d))}${kpi('Kills/game', n ? f1(k / n) : '—')}${kpi('Zones/game', n ? f1(z / n) : '—')}${kpi('Rank steps (both)', net > 0 ? `<span class="up">▲ ${net}</span>` : net < 0 ? `<span class="down">▼ ${-net}</span>` : '0')}</div>`;
+  }
+
+  function renderHistory() {
+    $('histCount').textContent = S.matches.length ? S.matches.length + ' match' + (S.matches.length > 1 ? 'es' : '') : '';
+    if (!S.matches.length) { $('history').innerHTML = '<div class="empty">No matches yet. Press W after a win or L after a loss.</div>'; return; }
+    const fmt = ts => new Date(ts).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    $('history').innerHTML = S.matches.map((m, i) => {
+      const bf = beforeRanks(i);
+      const players = S.players.map((p, j) => {
+        const x = m.stats[j], dl = m.rank[j] - bf[j];
+        const chip = dl > 0 ? `<span class="chip up" title="${esc(lab(m.rank[j]))}">▲ ${esc(shortLab(m.rank[j]))}</span>` : dl < 0 ? `<span class="chip down" title="${esc(lab(m.rank[j]))}">▼ ${esc(shortLab(m.rank[j]))}</span>` : `<span class="chip" title="${esc(lab(m.rank[j]))}">${esc(shortLab(m.rank[j]))}</span>`;
+        return `<div class="pl"><span class="nm">${esc(p.name)}</span><span class="zkd"><b>${x.z}</b> Z &middot; <b>${x.k}</b> K &middot; <b>${x.d}</b> D</span>${chip}</div>`;
+      }).join('');
+      return `<div class="row ${m.result === 'W' ? 'win' : 'loss'}"><div class="n"><b>#${i + 1}</b><span>${esc(fmt(m.ts))}</span></div><div><span class="pill">${m.result === 'W' ? 'WIN' : 'LOSS'}</span></div>${players}<button class="edit" type="button" data-i="${i}" aria-label="Edit match ${i + 1}">Edit</button></div>`;
+    }).reverse().join('');
+  }
+
+  function render() {
+    $('duoTitle').innerHTML = esc(S.players[0].name) + ' <span style="color:var(--muted)">&amp;</span> ' + esc(S.players[1].name);
+    document.title = S.matches.filter(m => m.result === 'W').length + '–' + S.matches.filter(m => m.result === 'L').length + ' · Dominion Duo';
+    renderHero(); renderPlayers(); renderTeam(); renderHistory();
+  }
+
+  // ---------- toast ----------
+  let toastTimer;
+  function toast(msg, withUndo) {
+    const t = $('toast');
+    t.innerHTML = '<span>' + esc(msg) + '</span>' + (withUndo && undoSnap ? '<button id="toastUndo" type="button">Undo</button>' : '');
+    t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 6000);
+    const u = $('toastUndo'); if (u) u.onclick = () => { undo(); };
+  }
+
+  // ---------- rank select helper ----------
+  function rankSelect(name, value) {
+    let html = `<select name="${name}">`;
+    TIERS.forEach((t, ti) => {
+      html += `<optgroup label="${t}">`;
+      for (let k = 0; k < 5; k++) { const idx = ti * 5 + k; html += `<option value="${idx}"${idx === value ? ' selected' : ''}>${esc(lab(idx))}</option>`; }
+      html += '</optgroup>';
+    });
+    html += `<optgroup label="Top">` + [25, 26].map(idx => `<option value="${idx}"${idx === value ? ' selected' : ''}>${esc(lab(idx))}</option>`).join('') + '</optgroup></select>';
+    return html;
+  }
+
+  // ---------- match dialog ----------
+  const mdlg = $('matchDlg'), mform = $('matchForm');
+  let editing = null, draftRes = 'W', baseRanks = [0, 0];
+
+  function updateSeg() { mform.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.res === draftRes))); }
+  function updateDeltas() {
+    S.players.forEach((p, j) => {
+      const r = +mform['r' + j].value, d = r - baseRanks[j], el = $('dl' + j);
+      el.className = 'delta ' + (d > 0 ? 'up' : d < 0 ? 'down' : 'flat');
+      el.textContent = d > 0 ? `▲ Rank up: ${lab(r)} (+${d})` : d < 0 ? `▼ Rank down: ${lab(r)} (${d})` : 'No rank change';
+    });
+  }
+  function openMatch(res, idx) {
+    editing = typeof idx === 'number' ? idx : null;
+    const m = editing !== null ? S.matches[editing] : null;
+    draftRes = m ? m.result : res;
+    baseRanks = editing !== null ? beforeRanks(editing) : currentRanks();
+    const ranks = m ? m.rank : currentRanks();
+    $('mdTitle').textContent = m ? 'Edit match #' + (editing + 1) : 'Log match';
+    $('mdDelete').hidden = editing === null;
+    $('mdPlayers').innerHTML = S.players.map((p, j) => {
+      const v = key => m ? m.stats[j][key] : '';
+      const num = (nm, key, label) => `<label>${label}<input type="number" inputmode="numeric" min="0" max="999" step="1" name="${nm}${j}" placeholder="0" value="${v(key)}"></label>`;
+      return `<fieldset><legend>${esc(p.name)}</legend>
+        <div class="nums">${num('z', 'z', 'Zones')}${num('k', 'k', 'Kills')}${num('d', 'd', 'Deaths')}</div>
+        <div class="rk"><label>Rank after${rankSelect('r' + j, ranks[j])}</label>
+          <button type="button" class="step" data-j="${j}" data-d="-1" tabindex="-1" aria-label="Down one rank for ${esc(p.name)}">−</button>
+          <button type="button" class="step" data-j="${j}" data-d="1" tabindex="-1" aria-label="Up one rank for ${esc(p.name)}">+</button></div>
+        <div class="delta" id="dl${j}"></div></fieldset>`;
+    }).join('');
+    updateSeg(); updateDeltas();
+    mdlg.showModal();
+    mform.elements['z0'].focus();
+  }
+
+  mform.addEventListener('click', e => {
+    const seg = e.target.closest('.seg button'); if (seg) { draftRes = seg.dataset.res; updateSeg(); return; }
+    const st = e.target.closest('.step');
+    if (st) { const sel = mform['r' + st.dataset.j]; sel.value = Math.max(0, Math.min(MAXR, +sel.value + +st.dataset.d)); updateDeltas(); }
+  });
+  mform.addEventListener('change', e => { if (e.target.matches('select')) updateDeltas(); });
+  mform.addEventListener('focusin', e => { if (e.target.matches('input[type=number]')) e.target.select(); });
+  $('mdCancel').onclick = () => mdlg.close();
+  mdlg.addEventListener('click', e => { if (e.target === mdlg) mdlg.close(); });
+
+  mform.addEventListener('submit', e => {
+    e.preventDefault();
+    const stats = S.players.map((_, j) => ({ z: clampInt(mform['z' + j].value, 0, 999), k: clampInt(mform['k' + j].value, 0, 999), d: clampInt(mform['d' + j].value, 0, 999) }));
+    const rank = S.players.map((_, j) => clampInt(mform['r' + j].value, 0, MAXR));
+    snap();
+    const wasEdit = editing !== null;
+    if (wasEdit) S.matches[editing] = { ...S.matches[editing], result: draftRes, stats, rank };
+    else S.matches.push({ id: uid(), ts: Date.now(), result: draftRes, stats, rank });
+    save(); render(); mdlg.close();
+    toast(wasEdit ? 'Match updated' : 'Logged ' + (draftRes === 'W' ? 'win' : 'loss') + ' #' + S.matches.length, true);
+  });
+  $('mdDelete').onclick = () => {
+    if (editing === null || !confirm('Delete match #' + (editing + 1) + '?')) return;
+    snap(); S.deleted.push(S.matches[editing].id); S.matches.splice(editing, 1); save(); render(); mdlg.close(); toast('Match deleted', true);
+  };
+
+  // ---------- settings dialog ----------
+  const sdlg = $('settingsDlg'), sform = $('settingsForm');
+  function openSettings() {
+    $('stFields').innerHTML = S.players.map((p, j) =>
+      `<div class="srow"><label>Player ${j + 1} name<input name="n${j}" maxlength="20" value="${esc(p.name)}"></label><label>Starting rank${rankSelect('s' + j, p.start)}</label></div>`).join('') +
+      '<div class="flat" style="font-size:13px">Starting rank is the baseline for rank ups and downs before your first logged match.</div>';
+    sdlg.showModal();
+  }
+  sform.addEventListener('submit', e => {
+    e.preventDefault(); snap();
+    S.players.forEach((p, j) => { p.name = (sform['n' + j].value.trim() || (j ? 'Duo' : 'You')).slice(0, 20); p.start = clampInt(sform['s' + j].value, 0, MAXR); });
+    save(); render(); sdlg.close(); toast('Settings saved', true);
+  });
+  $('stCancel').onclick = () => sdlg.close();
+  $('stClear').onclick = () => { if (!confirm('Delete ALL ' + S.matches.length + ' matches?')) return; snap(); S.deleted.push(...S.matches.map(m => m.id)); S.matches = []; save(); render(); sdlg.close(); toast('All matches cleared', true); };
+  sdlg.addEventListener('click', e => { if (e.target === sdlg) sdlg.close(); });
+
+  // ---------- export / import ----------
+  $('btnExport').onclick = () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' }));
+    a.download = 'dominion-duo-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  $('btnImport').onclick = () => $('fileImport').click();
+  $('fileImport').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const s = JSON.parse(await f.text());
+      if (!valid(s)) throw new Error('invalid');
+      if (!confirm('Replace current data with ' + s.matches.length + ' imported matches?')) { e.target.value = ''; return; }
+      s.deleted = s.deleted || []; snap(); S = s; save(); render(); toast('Imported', true);
+    } catch (err) { alert('That file is not a valid tracker export.'); }
+    e.target.value = '';
+  };
+
+  // ---------- wiring ----------
+  $('btnWin').onclick = () => openMatch('W');
+  $('btnLoss').onclick = () => openMatch('L');
+  $('btnSettings').onclick = openSettings;
+  $('history').addEventListener('click', e => { const b = e.target.closest('.edit'); if (b) openMatch(null, +b.dataset.i); });
+  addEventListener('keydown', e => {
+    if (document.querySelector('dialog[open]') || e.altKey) return;
+    if (e.target.closest && e.target.closest('input,select,textarea')) return;
+    const k = e.key.toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && k === 'z') { e.preventDefault(); undo(); return; }
+    if (e.ctrlKey || e.metaKey) return;
+    if (k === 'w') { e.preventDefault(); openMatch('W'); } else if (k === 'l') { e.preventDefault(); openMatch('L'); }
+  });
+
+  // ---------- games.js feed ----------
+  // games.js (next to this file) lists games; the open window re-reads it every few seconds and adds any it
+  // does not have yet. A game counts as known if its id matches, was deleted here before, or its full stat
+  // line is identical to one already logged. Games you delete here stay deleted.
+  const sig = m => [m.result, ...m.stats.flatMap(x => [x.z, x.k, x.d]), ...m.rank].join(',');
+  function mergeFeed(feed) {
+    if (!feed || !Array.isArray(feed.matches) || document.querySelector('dialog[open]')) return 0;
+    let changed = 0;
+    if (Array.isArray(feed.players)) {
+      feed.players.slice(0, 2).forEach((fp, j) => {
+        const cur = S.players[j].name;
+        if (fp && typeof fp.name === 'string' && fp.name.trim() && cur === (j ? 'Duo' : 'You') && fp.name !== cur) { S.players[j].name = fp.name.trim().slice(0, 20); changed++; }
+      });
+    }
+    const deleted = new Set(S.deleted), feedIds = new Set(feed.matches.map(m => m && m.id));
+    let added = 0;
+    feed.matches.forEach(fm => {
+      if (!validMatch(fm) || deleted.has(fm.id)) return;
+      let local = S.matches.find(m => m.id === fm.id);
+      // Same game already logged by hand under another id: adopt the feed's id so it is matched by id from now on.
+      if (!local) { local = S.matches.find(m => !feedIds.has(m.id) && sig(m) === sig(fm)); if (local) { local.id = fm.id; changed++; } }
+      if (local) {
+        // A correction from the feed: a higher "rev" overwrites the game's result, scores and ranks.
+        if ((fm.rev || 0) > (local.rev || 0)) { local.result = fm.result; local.stats = fm.stats; local.rank = fm.rank; local.rev = fm.rev; changed++; }
+        if (local.ts !== fm.ts) { local.ts = fm.ts; changed++; }   // feed time wins, keeps order stable
+        return;
+      }
+      S.matches.push({ id: fm.id, ts: fm.ts, result: fm.result, stats: fm.stats, rank: fm.rank, rev: fm.rev || 0 }); added++;
+    });
+    if (added || changed) { S.matches.sort((a, b) => a.ts - b.ts); undoSnap = null; save(); render(); }
+    return added;
+  }
+  function pollFeed() {
+    const s = document.createElement('script');
+    s.src = 'games.js?t=' + Date.now();
+    s.onload = () => { const n = mergeFeed(window.FH_FEED); s.remove(); if (n) toast(n === 1 ? 'New game added (#' + S.matches.length + ')' : n + ' new games added'); };
+    s.onerror = () => s.remove();
+    document.head.appendChild(s);
+  }
+
+  S = load();
+  mergeFeed(window.FH_FEED_INLINE);
+  save();
+  if (!storageOK) $('banner').hidden = false;
+  render();
+  if (location.protocol !== 'data:') { pollFeed(); setInterval(pollFeed, location.protocol === 'file:' ? 4000 : 10000); }   // gentler on the web host   // a data: snapshot cannot load games.js
+})();
+</script>
+</body>
+</html>
