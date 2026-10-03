@@ -115,10 +115,16 @@
   @media (max-width: 700px) {
     .hero { grid-template-columns: 1fr; } .kpis, .teamkpis { grid-template-columns: repeat(2, 1fr); }
     .rec-nums { font-size: 60px; }
-    .row { grid-template-columns: 60px 60px 1fr 52px; }
-    .row .pl:nth-of-type(2) { grid-column: 1 / -1; }
+    .row { grid-template-columns: 1fr auto auto; grid-template-areas: "n res edit" "p0 p0 p0" "p1 p1 p1"; row-gap: 6px; padding: 12px 4px; }
+    .row .n { grid-area: n; } .row .res { grid-area: res; } .row .edit { grid-area: edit; } .row .p0 { grid-area: p0; } .row .p1 { grid-area: p1; }
+    .row .n b { display: inline; margin-right: 8px; }
+    .pl { flex-wrap: nowrap; gap: 8px; } .pl .nm { min-width: 56px; } .zkd, .chip { white-space: nowrap; }
     .pgrid { grid-template-columns: 1fr; }
   }
+  /* Watch mode (shared web link): read-only, no logging buttons. Add ?edit to the address to get them back. */
+  .watch .addrow, .watch .tools, .watch .edit { display: none; }
+  .watch .row { grid-template-columns: 78px 66px 1fr 1fr; }
+  @media (max-width: 700px) { .watch .row { grid-template-columns: 1fr auto; grid-template-areas: "n res" "p0 p0" "p1 p1"; } }
   @media (prefers-reduced-motion: reduce) { #toast { transition: none; } }
 </style>
 </head>
@@ -321,9 +327,9 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
       const players = S.players.map((p, j) => {
         const x = m.stats[j], dl = m.rank[j] - bf[j];
         const chip = dl > 0 ? `<span class="chip up" title="${esc(lab(m.rank[j]))}">▲ ${esc(shortLab(m.rank[j]))}</span>` : dl < 0 ? `<span class="chip down" title="${esc(lab(m.rank[j]))}">▼ ${esc(shortLab(m.rank[j]))}</span>` : `<span class="chip" title="${esc(lab(m.rank[j]))}">${esc(shortLab(m.rank[j]))}</span>`;
-        return `<div class="pl"><span class="nm">${esc(p.name)}</span><span class="zkd"><b>${x.z}</b> Z &middot; <b>${x.k}</b> K &middot; <b>${x.d}</b> D</span>${chip}</div>`;
+        return `<div class="pl p${j}"><span class="nm">${esc(p.name)}</span><span class="zkd"><b>${x.z}</b> Z &middot; <b>${x.k}</b> K &middot; <b>${x.d}</b> D</span>${chip}</div>`;
       }).join('');
-      return `<div class="row ${m.result === 'W' ? 'win' : 'loss'}"><div class="n"><b>#${i + 1}</b><span>${esc(fmt(m.ts))}</span></div><div><span class="pill">${m.result === 'W' ? 'WIN' : 'LOSS'}</span></div>${players}<button class="edit" type="button" data-i="${i}" aria-label="Edit match ${i + 1}">Edit</button></div>`;
+      return `<div class="row ${m.result === 'W' ? 'win' : 'loss'}"><div class="n"><b>#${i + 1}</b><span>${esc(fmt(m.ts))}</span></div><div class="res"><span class="pill">${m.result === 'W' ? 'WIN' : 'LOSS'}</span></div>${players}<button class="edit" type="button" data-i="${i}" aria-label="Edit match ${i + 1}">Edit</button></div>`;
     }).reverse().join('');
   }
 
@@ -456,8 +462,9 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
   $('btnLoss').onclick = () => openMatch('L');
   $('btnSettings').onclick = openSettings;
   $('history').addEventListener('click', e => { const b = e.target.closest('.edit'); if (b) openMatch(null, +b.dataset.i); });
+  if (location.protocol === 'https:' && !/[?&]edit\b/.test(location.search)) document.body.classList.add('watch');
   addEventListener('keydown', e => {
-    if (document.querySelector('dialog[open]') || e.altKey) return;
+    if (document.body.classList.contains('watch') || document.querySelector('dialog[open]') || e.altKey) return;
     if (e.target.closest && e.target.closest('input,select,textarea')) return;
     const k = e.key.toLowerCase();
     if ((e.ctrlKey || e.metaKey) && k === 'z') { e.preventDefault(); undo(); return; }
