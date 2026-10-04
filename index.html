@@ -198,7 +198,7 @@
 /* Games baked into this file by add_game.py, so any view of the page (even a static snapshot that cannot
    read games.js or save to storage) shows every game. games.js adds live updates on top when it can load. */
 /*FEED_START*/
-window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches":[{"id":"g1win01","ts":1790965776123,"result":"W","stats":[{"z":4,"k":12,"d":4},{"z":2,"k":8,"d":4}],"rank":[15,10]},{"id":"g2win02","ts":1790967276123,"result":"W","stats":[{"z":4,"k":12,"d":3},{"z":4,"k":9,"d":4}],"rank":[16,10]},{"id":"g3win03","ts":1790967940220,"result":"W","stats":[{"z":1,"k":8,"d":4},{"z":3,"k":7,"d":3}],"rank":[17,11]},{"id":"g4loss04","ts":1790968595041,"result":"L","stats":[{"z":3,"k":5,"d":6},{"z":2,"k":3,"d":4}],"rank":[17,11]},{"id":"g5win05","ts":1790969968584,"result":"W","stats":[{"z":3,"k":12,"d":3},{"z":2,"k":9,"d":5}],"rank":[17,11]},{"id":"g6win06","ts":1791068610557,"result":"W","stats":[{"z":2,"k":6,"d":5},{"z":1,"k":7,"d":3}],"rank":[18,11],"rev":1},{"id":"g7win07","ts":1791069415456,"result":"W","stats":[{"z":0,"k":6,"d":4},{"z":3,"k":6,"d":1}],"rank":[18,12]},{"id":"g8win08","ts":1791070368865,"result":"W","stats":[{"z":2,"k":6,"d":7},{"z":3,"k":8,"d":4}],"rank":[19,13]},{"id":"g9win09","ts":1791071115174,"result":"W","stats":[{"z":1,"k":7,"d":5},{"z":1,"k":3,"d":5}],"rank":[19,13]},{"id":"g10win10","ts":1791071878860,"result":"W","stats":[{"z":3,"k":11,"d":3},{"z":2,"k":6,"d":5}],"rank":[20,14]},{"id":"g11loss11","ts":1791072611817,"result":"L","stats":[{"z":3,"k":8,"d":4},{"z":2,"k":6,"d":7}],"rank":[20,13]}]};
+window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches":[{"id":"g1win01","ts":1790965776123,"result":"W","stats":[{"z":4,"k":12,"d":4},{"z":2,"k":8,"d":4}],"rank":[15,10]},{"id":"g2win02","ts":1790967276123,"result":"W","stats":[{"z":4,"k":12,"d":3},{"z":4,"k":9,"d":4}],"rank":[16,10]},{"id":"g3win03","ts":1790967940220,"result":"W","stats":[{"z":1,"k":8,"d":4},{"z":3,"k":7,"d":3}],"rank":[17,11]},{"id":"g4loss04","ts":1790968595041,"result":"L","stats":[{"z":3,"k":5,"d":6},{"z":2,"k":3,"d":4}],"rank":[17,11]},{"id":"g5win05","ts":1790969968584,"result":"W","stats":[{"z":3,"k":12,"d":3},{"z":2,"k":9,"d":5}],"rank":[17,11]},{"id":"g6win06","ts":1791068610557,"result":"W","stats":[{"z":2,"k":6,"d":5},{"z":1,"k":7,"d":3}],"rank":[18,11],"rev":1},{"id":"g7win07","ts":1791069415456,"result":"W","stats":[{"z":0,"k":6,"d":4},{"z":3,"k":6,"d":1}],"rank":[18,12]},{"id":"g8win08","ts":1791070368865,"result":"W","stats":[{"z":2,"k":6,"d":7},{"z":3,"k":8,"d":4}],"rank":[19,13]},{"id":"g9win09","ts":1791071115174,"result":"W","stats":[{"z":1,"k":7,"d":5},{"z":1,"k":3,"d":5}],"rank":[19,13]},{"id":"g10win10","ts":1791071878860,"result":"W","stats":[{"z":3,"k":11,"d":3},{"z":2,"k":6,"d":5}],"rank":[20,14]},{"id":"g11loss11","ts":1791072611817,"result":"L","stats":[{"z":3,"k":8,"d":4},{"z":2,"k":6,"d":7}],"rank":[20,13]},{"id":"g12loss12","ts":1791074127114,"result":"L","stats":[{"z":4,"k":6,"d":6},null],"rank":[19,13]}]};
 /*FEED_END*/
 </script>
 <script>
@@ -228,7 +228,7 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
 
   const okRank = r => Number.isInteger(r) && r >= 0 && r <= MAXR;
   const validMatch = m => !!(m && typeof m.id === 'string' && (m.result === 'W' || m.result === 'L') && Number.isFinite(m.ts) &&
-    Array.isArray(m.stats) && m.stats.length === 2 && m.stats.every(x => x && [x.z, x.k, x.d].every(Number.isFinite)) &&
+    Array.isArray(m.stats) && m.stats.length === 2 && m.stats.every(x => x === null || (x && [x.z, x.k, x.d].every(Number.isFinite))) &&   // null = stats not recorded
     Array.isArray(m.rank) && m.rank.length === 2 && m.rank.every(okRank));
   function valid(s) {
     return !!(s && Array.isArray(s.players) && s.players.length === 2 &&
@@ -258,9 +258,9 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
   const currentRanks = () => S.matches.length ? S.matches[S.matches.length - 1].rank : S.players.map(p => p.start);
 
   function pstats(j) {
-    let z = 0, k = 0, d = 0, best = 0;
-    S.matches.forEach(m => { const x = m.stats[j]; z += x.z; k += x.k; d += x.d; best = Math.max(best, x.k); });
-    return { n: S.matches.length, z, k, d, best };
+    let z = 0, k = 0, d = 0, best = 0, known = 0;   // games with no recorded stats count as games but not in the averages
+    S.matches.forEach(m => { const x = m.stats[j]; if (!x) return; known++; z += x.z; k += x.k; d += x.d; best = Math.max(best, x.k); });
+    return { n: S.matches.length, known, z, k, d, best };
   }
   const kdText = (k, d) => d ? (k / d).toFixed(2) : (k ? '∞' : '—');
 
@@ -300,22 +300,23 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
       const series = [p.start, ...S.matches.map(m => m.rank[j])];
       const labels = ['Start: ' + lab(p.start), ...S.matches.map((m, i) => '#' + (i + 1) + ': ' + lab(m.rank[j]))];
       const netHtml = net > 0 ? `<span class="up">▲ ${net} step${net > 1 ? 's' : ''} up</span>` : net < 0 ? `<span class="down">▼ ${-net} step${net < -1 ? 's' : ''} down</span>` : `<span class="flat">no net change</span>`;
-      const avg = v => n ? f1(v / n) : '—';
+      const avg = v => st.known ? f1(v / st.known) : '—';
       const stat = (k, v) => `<div><dt>${k}</dt><dd>${v}</dd></div>`;
       return `<article class="card" style="--tier:${col(cur[j])}">
         <header><div class="pname">${esc(p.name)}</div><div class="badge"><i class="gem"></i>${esc(lab(cur[j]))}</div></header>
         <div class="rankline">Started <b>${esc(lab(p.start))}</b> &middot; ${netHtml}</div>
         <div class="spark">${spark(series, labels)}</div>
-        <dl class="stats">${stat('Zones/game', avg(st.z))}${stat('Kills/game', avg(st.k))}${stat('Deaths/game', avg(st.d))}${stat('K/D', kdText(st.k, st.d))}${stat('Best kills', n ? st.best : '—')}${stat('Games', n)}</dl>
+        <dl class="stats">${stat('Zones/game', avg(st.z))}${stat('Kills/game', avg(st.k))}${stat('Deaths/game', avg(st.d))}${stat('K/D', kdText(st.k, st.d))}${stat('Best kills', st.known ? st.best : '—')}${stat('Games', n)}</dl>
       </article>`;
     }).join('');
   }
 
   function renderTeam() {
-    const a = pstats(0), b = pstats(1), n = a.n, k = a.k + b.k, d = a.d + b.d, z = a.z + b.z;
+    const a = pstats(0), b = pstats(1), k = a.k + b.k, d = a.d + b.d, any = a.known || b.known;
+    const per = (s, key) => s.known ? s[key] / s.known : 0;   // each player's average over his own recorded games
     const cur = currentRanks(), net = cur.reduce((s, r, j) => s + r - S.players[j].start, 0);
     const kpi = (t, v) => `<div class="kpi"><div class="k">${t}</div><div class="v">${v}</div></div>`;
-    $('team').innerHTML = `<h2><span>Duo combined</span></h2><div class="teamkpis">${kpi('Team K/D', kdText(k, d))}${kpi('Kills/game', n ? f1(k / n) : '—')}${kpi('Zones/game', n ? f1(z / n) : '—')}${kpi('Rank steps (both)', net > 0 ? `<span class="up">▲ ${net}</span>` : net < 0 ? `<span class="down">▼ ${-net}</span>` : '0')}</div>`;
+    $('team').innerHTML = `<h2><span>Duo combined</span></h2><div class="teamkpis">${kpi('Team K/D', kdText(k, d))}${kpi('Kills/game', any ? f1(per(a, 'k') + per(b, 'k')) : '—')}${kpi('Zones/game', any ? f1(per(a, 'z') + per(b, 'z')) : '—')}${kpi('Rank steps (both)', net > 0 ? `<span class="up">▲ ${net}</span>` : net < 0 ? `<span class="down">▼ ${-net}</span>` : '0')}</div>`;
   }
 
   function renderHistory() {
@@ -327,7 +328,8 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
       const players = S.players.map((p, j) => {
         const x = m.stats[j], dl = m.rank[j] - bf[j];
         const chip = dl > 0 ? `<span class="chip up" title="${esc(lab(m.rank[j]))}">▲ ${esc(shortLab(m.rank[j]))}</span>` : dl < 0 ? `<span class="chip down" title="${esc(lab(m.rank[j]))}">▼ ${esc(shortLab(m.rank[j]))}</span>` : `<span class="chip" title="${esc(lab(m.rank[j]))}">${esc(shortLab(m.rank[j]))}</span>`;
-        return `<div class="pl p${j}"><span class="nm">${esc(p.name)}</span><span class="zkd"><b>${x.z}</b> Z &middot; <b>${x.k}</b> K &middot; <b>${x.d}</b> D</span>${chip}</div>`;
+        const zkd = x ? `<span class="zkd"><b>${x.z}</b> Z &middot; <b>${x.k}</b> K &middot; <b>${x.d}</b> D</span>` : `<span class="zkd flat">stats not recorded</span>`;
+        return `<div class="pl p${j}"><span class="nm">${esc(p.name)}</span>${zkd}${chip}</div>`;
       }).join('');
       return `<div class="row ${m.result === 'W' ? 'win' : 'loss'}"><div class="n"><b>#${i + 1}</b><span>${esc(fmt(m.ts))}</span></div><div class="res"><span class="pill">${m.result === 'W' ? 'WIN' : 'LOSS'}</span></div>${players}<button class="edit" type="button" data-i="${i}" aria-label="Edit match ${i + 1}">Edit</button></div>`;
     }).reverse().join('');
@@ -381,7 +383,7 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
     $('mdTitle').textContent = m ? 'Edit match #' + (editing + 1) : 'Log match';
     $('mdDelete').hidden = editing === null;
     $('mdPlayers').innerHTML = S.players.map((p, j) => {
-      const v = key => m ? m.stats[j][key] : '';
+      const v = key => m && m.stats[j] ? m.stats[j][key] : '';
       const num = (nm, key, label) => `<label>${label}<input type="number" inputmode="numeric" min="0" max="999" step="1" name="${nm}${j}" placeholder="0" value="${v(key)}"></label>`;
       return `<fieldset><legend>${esc(p.name)}</legend>
         <div class="nums">${num('z', 'z', 'Zones')}${num('k', 'k', 'Kills')}${num('d', 'd', 'Deaths')}</div>
@@ -407,7 +409,11 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
 
   mform.addEventListener('submit', e => {
     e.preventDefault();
-    const stats = S.players.map((_, j) => ({ z: clampInt(mform['z' + j].value, 0, 999), k: clampInt(mform['k' + j].value, 0, 999), d: clampInt(mform['d' + j].value, 0, 999) }));
+    const stats = S.players.map((_, j) => {
+      const f = ['z', 'k', 'd'].map(c => mform[c + j].value.trim());
+      if (editing !== null && S.matches[editing].stats[j] === null && f.every(x => x === '')) return null;   // keep "not recorded" if left blank
+      return { z: clampInt(f[0], 0, 999), k: clampInt(f[1], 0, 999), d: clampInt(f[2], 0, 999) };
+    });
     const rank = S.players.map((_, j) => clampInt(mform['r' + j].value, 0, MAXR));
     snap();
     const wasEdit = editing !== null;
@@ -476,7 +482,7 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
   // games.js (next to this file) lists games; the open window re-reads it every few seconds and adds any it
   // does not have yet. A game counts as known if its id matches, was deleted here before, or its full stat
   // line is identical to one already logged. Games you delete here stay deleted.
-  const sig = m => [m.result, ...m.stats.flatMap(x => [x.z, x.k, x.d]), ...m.rank].join(',');
+  const sig = m => [m.result, ...m.stats.flatMap(x => x ? [x.z, x.k, x.d] : ['-', '-', '-']), ...m.rank].join(',');
   function mergeFeed(feed) {
     if (!feed || !Array.isArray(feed.matches) || document.querySelector('dialog[open]')) return 0;
     let changed = 0;
