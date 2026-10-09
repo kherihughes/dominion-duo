@@ -1,6 +1,7 @@
 // Games feed for the tracker. Claude adds new games at the END of this list; the open tracker window
 // picks them up within ~4 seconds. Keep every id unique. add_game.py also bakes this list into index.html.
 // stats are [you, duo] as {z: zones, k: kills, d: deaths}; rank is the rank AFTER the game for [you, duo].
+// "solo": 0 (you) or 1 (duo) marks a ranked game that player played alone; it is kept out of the duo record and stats.
 // Rank index: Bronze V..I = 0-4, Silver 5-9, Gold V..I = 10-14, Platinum V..I = 15-19, Diamond 20-24, Master 25, Grand Master 26.
 window.FH_FEED = {
   players: [{ name: "Kheri" }, { name: "spanz" }],
@@ -42,6 +43,8 @@ window.FH_FEED = {
     {"id": "g35win35", "ts": 1791501635494, "result": "W", "stats": [{"z": 5, "k": 10, "d": 6}, {"z": 3, "k": 12, "d": 6}], "rank": [18, 11]},
     {"id": "g36win36", "ts": 1791502385631, "result": "W", "stats": [{"z": 1, "k": 9, "d": 3}, {"z": 3, "k": 8, "d": 7}], "rank": [18, 12]},
     {"id": "g37loss37", "ts": 1791503312739, "result": "L", "stats": [{"z": 1, "k": 7, "d": 6}, {"z": 2, "k": 11, "d": 6}], "rank": [18, 11]},
-    {"id": "g38loss38", "ts": 1791506565697, "result": "L", "stats": [{"z": 5, "k": 5, "d": 6}, {"z": 1, "k": 2, "d": 8}], "rank": [18, 11]}
+    {"id": "g38loss38", "ts": 1791506565697, "result": "L", "stats": [{"z": 5, "k": 5, "d": 6}, {"z": 1, "k": 2, "d": 8}], "rank": [18, 11]},
+    {"id": "g39sololoss39", "ts": 1791515298482, "result": "L", "stats": [{"z": 2, "k": 3, "d": 6}, null], "rank": [17, 11], "solo": 0},
+    {"id": "g40solowin40", "ts": 1791515299980, "result": "W", "stats": [{"z": 3, "k": 8, "d": 0}, null], "rank": [17, 11], "solo": 0}
   ]
 };
