@@ -72,6 +72,7 @@
   .row .n b { display: block; } .row .n span { color: var(--muted); font-size: 12px; }
   .pill { display: inline-block; min-width: 56px; text-align: center; font-weight: 700; font-size: 12px; letter-spacing: .08em; padding: 4px 9px; border-radius: 999px; }
   .row.win .pill { background: rgba(63,209,127,.16); color: var(--win); } .row.loss .pill { background: rgba(255,107,107,.16); color: var(--loss); }
+  .solotag { display: block; width: max-content; margin: 4px auto 0; font-size: 10px; font-weight: 700; letter-spacing: .1em; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); }
   .pl { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: center; min-width: 0; }
   .nm { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
   .zkd b { font-weight: 650; }
@@ -198,7 +199,7 @@
 /* Games baked into this file by add_game.py, so any view of the page (even a static snapshot that cannot
    read games.js or save to storage) shows every game. games.js adds live updates on top when it can load. */
 /*FEED_START*/
-window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches":[{"id":"g1win01","ts":1790965776123,"result":"W","stats":[{"z":4,"k":12,"d":4},{"z":2,"k":8,"d":4}],"rank":[15,10]},{"id":"g2win02","ts":1790967276123,"result":"W","stats":[{"z":4,"k":12,"d":3},{"z":4,"k":9,"d":4}],"rank":[16,10]},{"id":"g3win03","ts":1790967940220,"result":"W","stats":[{"z":1,"k":8,"d":4},{"z":3,"k":7,"d":3}],"rank":[17,11]},{"id":"g4loss04","ts":1790968595041,"result":"L","stats":[{"z":3,"k":5,"d":6},{"z":2,"k":3,"d":4}],"rank":[17,11]},{"id":"g5win05","ts":1790969968584,"result":"W","stats":[{"z":3,"k":12,"d":3},{"z":2,"k":9,"d":5}],"rank":[17,11]},{"id":"g6win06","ts":1791068610557,"result":"W","stats":[{"z":2,"k":6,"d":5},{"z":1,"k":7,"d":3}],"rank":[18,11],"rev":1},{"id":"g7win07","ts":1791069415456,"result":"W","stats":[{"z":0,"k":6,"d":4},{"z":3,"k":6,"d":1}],"rank":[18,12]},{"id":"g8win08","ts":1791070368865,"result":"W","stats":[{"z":2,"k":6,"d":7},{"z":3,"k":8,"d":4}],"rank":[19,13]},{"id":"g9win09","ts":1791071115174,"result":"W","stats":[{"z":1,"k":7,"d":5},{"z":1,"k":3,"d":5}],"rank":[19,13]},{"id":"g10win10","ts":1791071878860,"result":"W","stats":[{"z":3,"k":11,"d":3},{"z":2,"k":6,"d":5}],"rank":[20,14]},{"id":"g11loss11","ts":1791072611817,"result":"L","stats":[{"z":3,"k":8,"d":4},{"z":2,"k":6,"d":7}],"rank":[20,13]},{"id":"g12loss12","ts":1791074127114,"result":"L","stats":[{"z":4,"k":6,"d":6},null],"rank":[19,13]},{"id":"g13loss13","ts":1791075208373,"result":"L","stats":[{"z":2,"k":9,"d":6},{"z":4,"k":8,"d":9}],"rank":[19,13]},{"id":"g14win14","ts":1791076421717,"result":"W","stats":[{"z":5,"k":13,"d":5},{"z":2,"k":14,"d":6}],"rank":[19,13]},{"id":"g15loss15","ts":1791077207863,"result":"L","stats":[{"z":3,"k":12,"d":5},{"z":2,"k":6,"d":5}],"rank":[19,13]},{"id":"g16loss16","ts":1791078375212,"result":"L","stats":[{"z":1,"k":3,"d":5},{"z":0,"k":4,"d":5}],"rank":[18,12]},{"id":"g17win17","ts":1791079203023,"result":"W","stats":[{"z":2,"k":12,"d":3},{"z":3,"k":10,"d":0}],"rank":[19,13]},{"id":"g18loss18","ts":1791080020257,"result":"L","stats":[{"z":2,"k":7,"d":5},{"z":0,"k":2,"d":7}],"rank":[18,12]},{"id":"g19win19","ts":1791081078014,"result":"W","stats":[{"z":1,"k":10,"d":3},{"z":2,"k":5,"d":5}],"rank":[18,13]},{"id":"g20win20","ts":1791081830657,"result":"W","stats":[{"z":4,"k":7,"d":3},{"z":3,"k":7,"d":4}],"rank":[19,13]},{"id":"g21loss21","ts":1791083262975,"result":"L","stats":[{"z":2,"k":15,"d":8},{"z":2,"k":12,"d":6}],"rank":[18,13]},{"id":"g22loss22","ts":1791084533308,"result":"L","stats":[{"z":4,"k":6,"d":8},{"z":3,"k":7,"d":7}],"rank":[18,12]},{"id":"g23win23","ts":1791413655194,"result":"W","stats":[{"z":3,"k":4,"d":2},{"z":2,"k":11,"d":6}],"rank":[18,11]},{"id":"g24loss24","ts":1791414647955,"result":"L","stats":[{"z":4,"k":16,"d":5},null],"rank":[18,11]},{"id":"g25loss25","ts":1791415393967,"result":"L","stats":[{"z":1,"k":4,"d":4},{"z":1,"k":0,"d":5}],"rank":[18,11],"rev":1},{"id":"g26win26","ts":1791416308079,"result":"W","stats":[{"z":2,"k":9,"d":5},{"z":1,"k":7,"d":6}],"rank":[18,11]},{"id":"g27win27","ts":1791417762223,"result":"W","stats":[{"z":2,"k":12,"d":4},{"z":1,"k":15,"d":3}],"rank":[18,11]},{"id":"g28loss28","ts":1791417831989,"result":"L","stats":[{"z":2,"k":4,"d":3},{"z":2,"k":4,"d":6}],"rank":[18,11]},{"id":"g29win29","ts":1791420793691,"result":"W","stats":[{"z":0,"k":8,"d":5},{"z":1,"k":6,"d":6}],"rank":[19,12]},{"id":"g30loss30","ts":1791494826262,"result":"L","stats":[{"z":1,"k":1,"d":6},{"z":1,"k":7,"d":7}],"rank":[19,12]},{"id":"g31win31","ts":1791498262925,"result":"W","stats":[{"z":1,"k":9,"d":3},{"z":2,"k":10,"d":4}],"rank":[19,12]},{"id":"g32loss32","ts":1791499183796,"result":"L","stats":[{"z":3,"k":11,"d":6},{"z":2,"k":7,"d":6}],"rank":[19,12]},{"id":"g33loss33","ts":1791500001154,"result":"L","stats":[{"z":2,"k":4,"d":6},{"z":1,"k":4,"d":4}],"rank":[18,11]},{"id":"g34loss34","ts":1791500833510,"result":"L","stats":[{"z":2,"k":6,"d":5},{"z":1,"k":1,"d":6}],"rank":[18,11]},{"id":"g35win35","ts":1791501635494,"result":"W","stats":[{"z":5,"k":10,"d":6},{"z":3,"k":12,"d":6}],"rank":[18,11]},{"id":"g36win36","ts":1791502385631,"result":"W","stats":[{"z":1,"k":9,"d":3},{"z":3,"k":8,"d":7}],"rank":[18,12]},{"id":"g37loss37","ts":1791503312739,"result":"L","stats":[{"z":1,"k":7,"d":6},{"z":2,"k":11,"d":6}],"rank":[18,11]},{"id":"g38loss38","ts":1791506565697,"result":"L","stats":[{"z":5,"k":5,"d":6},{"z":1,"k":2,"d":8}],"rank":[18,11]}]};
+window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches":[{"id":"g1win01","ts":1790965776123,"result":"W","stats":[{"z":4,"k":12,"d":4},{"z":2,"k":8,"d":4}],"rank":[15,10]},{"id":"g2win02","ts":1790967276123,"result":"W","stats":[{"z":4,"k":12,"d":3},{"z":4,"k":9,"d":4}],"rank":[16,10]},{"id":"g3win03","ts":1790967940220,"result":"W","stats":[{"z":1,"k":8,"d":4},{"z":3,"k":7,"d":3}],"rank":[17,11]},{"id":"g4loss04","ts":1790968595041,"result":"L","stats":[{"z":3,"k":5,"d":6},{"z":2,"k":3,"d":4}],"rank":[17,11]},{"id":"g5win05","ts":1790969968584,"result":"W","stats":[{"z":3,"k":12,"d":3},{"z":2,"k":9,"d":5}],"rank":[17,11]},{"id":"g6win06","ts":1791068610557,"result":"W","stats":[{"z":2,"k":6,"d":5},{"z":1,"k":7,"d":3}],"rank":[18,11],"rev":1},{"id":"g7win07","ts":1791069415456,"result":"W","stats":[{"z":0,"k":6,"d":4},{"z":3,"k":6,"d":1}],"rank":[18,12]},{"id":"g8win08","ts":1791070368865,"result":"W","stats":[{"z":2,"k":6,"d":7},{"z":3,"k":8,"d":4}],"rank":[19,13]},{"id":"g9win09","ts":1791071115174,"result":"W","stats":[{"z":1,"k":7,"d":5},{"z":1,"k":3,"d":5}],"rank":[19,13]},{"id":"g10win10","ts":1791071878860,"result":"W","stats":[{"z":3,"k":11,"d":3},{"z":2,"k":6,"d":5}],"rank":[20,14]},{"id":"g11loss11","ts":1791072611817,"result":"L","stats":[{"z":3,"k":8,"d":4},{"z":2,"k":6,"d":7}],"rank":[20,13]},{"id":"g12loss12","ts":1791074127114,"result":"L","stats":[{"z":4,"k":6,"d":6},null],"rank":[19,13]},{"id":"g13loss13","ts":1791075208373,"result":"L","stats":[{"z":2,"k":9,"d":6},{"z":4,"k":8,"d":9}],"rank":[19,13]},{"id":"g14win14","ts":1791076421717,"result":"W","stats":[{"z":5,"k":13,"d":5},{"z":2,"k":14,"d":6}],"rank":[19,13]},{"id":"g15loss15","ts":1791077207863,"result":"L","stats":[{"z":3,"k":12,"d":5},{"z":2,"k":6,"d":5}],"rank":[19,13]},{"id":"g16loss16","ts":1791078375212,"result":"L","stats":[{"z":1,"k":3,"d":5},{"z":0,"k":4,"d":5}],"rank":[18,12]},{"id":"g17win17","ts":1791079203023,"result":"W","stats":[{"z":2,"k":12,"d":3},{"z":3,"k":10,"d":0}],"rank":[19,13]},{"id":"g18loss18","ts":1791080020257,"result":"L","stats":[{"z":2,"k":7,"d":5},{"z":0,"k":2,"d":7}],"rank":[18,12]},{"id":"g19win19","ts":1791081078014,"result":"W","stats":[{"z":1,"k":10,"d":3},{"z":2,"k":5,"d":5}],"rank":[18,13]},{"id":"g20win20","ts":1791081830657,"result":"W","stats":[{"z":4,"k":7,"d":3},{"z":3,"k":7,"d":4}],"rank":[19,13]},{"id":"g21loss21","ts":1791083262975,"result":"L","stats":[{"z":2,"k":15,"d":8},{"z":2,"k":12,"d":6}],"rank":[18,13]},{"id":"g22loss22","ts":1791084533308,"result":"L","stats":[{"z":4,"k":6,"d":8},{"z":3,"k":7,"d":7}],"rank":[18,12]},{"id":"g23win23","ts":1791413655194,"result":"W","stats":[{"z":3,"k":4,"d":2},{"z":2,"k":11,"d":6}],"rank":[18,11]},{"id":"g24loss24","ts":1791414647955,"result":"L","stats":[{"z":4,"k":16,"d":5},null],"rank":[18,11]},{"id":"g25loss25","ts":1791415393967,"result":"L","stats":[{"z":1,"k":4,"d":4},{"z":1,"k":0,"d":5}],"rank":[18,11],"rev":1},{"id":"g26win26","ts":1791416308079,"result":"W","stats":[{"z":2,"k":9,"d":5},{"z":1,"k":7,"d":6}],"rank":[18,11]},{"id":"g27win27","ts":1791417762223,"result":"W","stats":[{"z":2,"k":12,"d":4},{"z":1,"k":15,"d":3}],"rank":[18,11]},{"id":"g28loss28","ts":1791417831989,"result":"L","stats":[{"z":2,"k":4,"d":3},{"z":2,"k":4,"d":6}],"rank":[18,11]},{"id":"g29win29","ts":1791420793691,"result":"W","stats":[{"z":0,"k":8,"d":5},{"z":1,"k":6,"d":6}],"rank":[19,12]},{"id":"g30loss30","ts":1791494826262,"result":"L","stats":[{"z":1,"k":1,"d":6},{"z":1,"k":7,"d":7}],"rank":[19,12]},{"id":"g31win31","ts":1791498262925,"result":"W","stats":[{"z":1,"k":9,"d":3},{"z":2,"k":10,"d":4}],"rank":[19,12]},{"id":"g32loss32","ts":1791499183796,"result":"L","stats":[{"z":3,"k":11,"d":6},{"z":2,"k":7,"d":6}],"rank":[19,12]},{"id":"g33loss33","ts":1791500001154,"result":"L","stats":[{"z":2,"k":4,"d":6},{"z":1,"k":4,"d":4}],"rank":[18,11]},{"id":"g34loss34","ts":1791500833510,"result":"L","stats":[{"z":2,"k":6,"d":5},{"z":1,"k":1,"d":6}],"rank":[18,11]},{"id":"g35win35","ts":1791501635494,"result":"W","stats":[{"z":5,"k":10,"d":6},{"z":3,"k":12,"d":6}],"rank":[18,11]},{"id":"g36win36","ts":1791502385631,"result":"W","stats":[{"z":1,"k":9,"d":3},{"z":3,"k":8,"d":7}],"rank":[18,12]},{"id":"g37loss37","ts":1791503312739,"result":"L","stats":[{"z":1,"k":7,"d":6},{"z":2,"k":11,"d":6}],"rank":[18,11]},{"id":"g38loss38","ts":1791506565697,"result":"L","stats":[{"z":5,"k":5,"d":6},{"z":1,"k":2,"d":8}],"rank":[18,11]},{"id":"g39sololoss39","ts":1791515298482,"result":"L","stats":[{"z":2,"k":3,"d":6},null],"rank":[17,11],"solo":0},{"id":"g40solowin40","ts":1791515299980,"result":"W","stats":[{"z":3,"k":8,"d":0},null],"rank":[17,11],"solo":0}]};
 /*FEED_END*/
 </script>
 <script>
@@ -229,7 +230,8 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
   const okRank = r => Number.isInteger(r) && r >= 0 && r <= MAXR;
   const validMatch = m => !!(m && typeof m.id === 'string' && (m.result === 'W' || m.result === 'L') && Number.isFinite(m.ts) &&
     Array.isArray(m.stats) && m.stats.length === 2 && m.stats.every(x => x === null || (x && [x.z, x.k, x.d].every(Number.isFinite))) &&   // null = stats not recorded
-    Array.isArray(m.rank) && m.rank.length === 2 && m.rank.every(okRank));
+    Array.isArray(m.rank) && m.rank.length === 2 && m.rank.every(okRank) &&
+    (m.solo === undefined || m.solo === 0 || m.solo === 1));   // solo = index of the player who played alone
   function valid(s) {
     return !!(s && Array.isArray(s.players) && s.players.length === 2 &&
       s.players.every(p => p && typeof p.name === 'string' && okRank(p.start)) &&
@@ -256,11 +258,14 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
 
   const beforeRanks = i => i === 0 ? S.players.map(p => p.start) : S.matches[i - 1].rank;
   const currentRanks = () => S.matches.length ? S.matches[S.matches.length - 1].rank : S.players.map(p => p.start);
+  // A solo game is a ranked game one of you played alone: it moves that player's rank but stays out of the duo record and stats.
+  const isSolo = m => m.solo === 0 || m.solo === 1;
+  const duo = () => S.matches.filter(m => !isSolo(m));
 
   function pstats(j) {
-    let z = 0, k = 0, d = 0, best = 0, known = 0;   // games with no recorded stats count as games but not in the averages
-    S.matches.forEach(m => { const x = m.stats[j]; if (!x) return; known++; z += x.z; k += x.k; d += x.d; best = Math.max(best, x.k); });
-    return { n: S.matches.length, known, z, k, d, best };
+    let z = 0, k = 0, d = 0, best = 0, known = 0, n = 0;   // duo games only; games with no recorded stats count as games but not in the averages
+    S.matches.forEach(m => { if (isSolo(m)) return; n++; const x = m.stats[j]; if (!x) return; known++; z += x.z; k += x.k; d += x.d; best = Math.max(best, x.k); });
+    return { n, known, z, k, d, best };
   }
   const kdText = (k, d) => d ? (k / d).toFixed(2) : (k ? '∞' : '—');
 
@@ -278,7 +283,8 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
   }
 
   function renderHero() {
-    const ms = S.matches, W = ms.filter(m => m.result === 'W').length, L = ms.length - W, n = ms.length;
+    const ms = duo(), W = ms.filter(m => m.result === 'W').length, L = ms.length - W, n = ms.length;
+    const so = S.matches.filter(isSolo), sw = so.filter(m => m.result === 'W').length;
     const wr = n ? Math.round(100 * W / n) + '%' : '—';
     let streak = '—';
     if (n) { let c = 1; while (c < n && ms[n - 1 - c].result === ms[n - 1].result) c++; const r = ms[n - 1].result; streak = `<span class="${r === 'W' ? 'up' : 'down'}">${r}${c}</span>`; }
@@ -288,7 +294,7 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
     const strip = '<i></i>'.repeat(pad) + last.map(m => `<i class="${m.result}" title="${m.result === 'W' ? 'Win' : 'Loss'}"></i>`).join('');
     const kpi = (k, v) => `<div class="kpi"><div class="k">${k}</div><div class="v">${v}</div></div>`;
     $('hero').innerHTML =
-      `<div><div class="rec-nums"><span class="w">${W}</span><span class="dash">–</span><span class="l">${L}</span></div><div class="rec-label">Record (W–L)</div></div>` +
+      `<div><div class="rec-nums"><span class="w">${W}</span><span class="dash">–</span><span class="l">${L}</span></div><div class="rec-label">Record (W–L)${so.length ? ` &middot; solo ${sw}–${so.length - sw} not counted` : ''}</div></div>` +
       `<div class="kpis">${kpi('Win rate', wr)}${kpi('Streak', streak)}${kpi('Today', tw + '–' + (tm.length - tw))}${kpi('Games', n)}</div>` +
       `<div class="form"><div class="form-label">${n === 0 ? 'Recent results' : n === 1 ? 'Last result' : 'Last ' + Math.min(n, 20) + ' results (newest right)'}</div><div class="strip">${strip}</div></div>`;
   }
@@ -298,7 +304,7 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
     $('players').innerHTML = S.players.map((p, j) => {
       const st = pstats(j), n = st.n, net = cur[j] - p.start;
       const series = [p.start, ...S.matches.map(m => m.rank[j])];
-      const labels = ['Start: ' + lab(p.start), ...S.matches.map((m, i) => '#' + (i + 1) + ': ' + lab(m.rank[j]))];
+      const labels = ['Start: ' + lab(p.start), ...S.matches.map((m, i) => '#' + (i + 1) + (isSolo(m) ? ' (solo)' : '') + ': ' + lab(m.rank[j]))];
       const netHtml = net > 0 ? `<span class="up">▲ ${net} step${net > 1 ? 's' : ''} up</span>` : net < 0 ? `<span class="down">▼ ${-net} step${net < -1 ? 's' : ''} down</span>` : `<span class="flat">no net change</span>`;
       const avg = v => st.known ? f1(v / st.known) : '—';
       const stat = (k, v) => `<div><dt>${k}</dt><dd>${v}</dd></div>`;
@@ -320,7 +326,8 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
   }
 
   function renderHistory() {
-    $('histCount').textContent = S.matches.length ? S.matches.length + ' match' + (S.matches.length > 1 ? 'es' : '') : '';
+    const nd = duo().length, ns = S.matches.length - nd;
+    $('histCount').textContent = S.matches.length ? nd + ' duo match' + (nd === 1 ? '' : 'es') + (ns ? ' · ' + ns + ' solo' : '') : '';
     if (!S.matches.length) { $('history').innerHTML = '<div class="empty">No matches yet. Press W after a win or L after a loss.</div>'; return; }
     const fmt = ts => new Date(ts).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
     $('history').innerHTML = S.matches.map((m, i) => {
@@ -328,16 +335,17 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
       const players = S.players.map((p, j) => {
         const x = m.stats[j], dl = m.rank[j] - bf[j];
         const chip = dl > 0 ? `<span class="chip up" title="${esc(lab(m.rank[j]))}">▲ ${esc(shortLab(m.rank[j]))}</span>` : dl < 0 ? `<span class="chip down" title="${esc(lab(m.rank[j]))}">▼ ${esc(shortLab(m.rank[j]))}</span>` : `<span class="chip" title="${esc(lab(m.rank[j]))}">${esc(shortLab(m.rank[j]))}</span>`;
-        const zkd = x ? `<span class="zkd"><b>${x.z}</b> Z &middot; <b>${x.k}</b> K &middot; <b>${x.d}</b> D</span>` : `<span class="zkd flat">stats not recorded</span>`;
+        const sat = isSolo(m) && m.solo !== j;
+        const zkd = x ? `<span class="zkd"><b>${x.z}</b> Z &middot; <b>${x.k}</b> K &middot; <b>${x.d}</b> D</span>` : `<span class="zkd flat">${sat ? 'didn’t play' : 'stats not recorded'}</span>`;
         return `<div class="pl p${j}"><span class="nm">${esc(p.name)}</span>${zkd}${chip}</div>`;
       }).join('');
-      return `<div class="row ${m.result === 'W' ? 'win' : 'loss'}"><div class="n"><b>#${i + 1}</b><span>${esc(fmt(m.ts))}</span></div><div class="res"><span class="pill">${m.result === 'W' ? 'WIN' : 'LOSS'}</span></div>${players}<button class="edit" type="button" data-i="${i}" aria-label="Edit match ${i + 1}">Edit</button></div>`;
+      return `<div class="row ${m.result === 'W' ? 'win' : 'loss'}${isSolo(m) ? ' solo' : ''}"><div class="n"><b>#${i + 1}</b><span>${esc(fmt(m.ts))}</span></div><div class="res"><span class="pill">${m.result === 'W' ? 'WIN' : 'LOSS'}</span>${isSolo(m) ? '<span class="solotag">SOLO</span>' : ''}</div>${players}<button class="edit" type="button" data-i="${i}" aria-label="Edit match ${i + 1}">Edit</button></div>`;
     }).reverse().join('');
   }
 
   function render() {
     $('duoTitle').innerHTML = esc(S.players[0].name) + ' <span style="color:var(--muted)">&amp;</span> ' + esc(S.players[1].name);
-    document.title = S.matches.filter(m => m.result === 'W').length + '–' + S.matches.filter(m => m.result === 'L').length + ' · Dominion Duo';
+    document.title = duo().filter(m => m.result === 'W').length + '–' + duo().filter(m => m.result === 'L').length + ' · Dominion Duo';
     renderHero(); renderPlayers(); renderTeam(); renderHistory();
   }
 
@@ -482,7 +490,7 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
   // games.js (next to this file) lists games; the open window re-reads it every few seconds and adds any it
   // does not have yet. A game counts as known if its id matches, was deleted here before, or its full stat
   // line is identical to one already logged. Games you delete here stay deleted.
-  const sig = m => [m.result, ...m.stats.flatMap(x => x ? [x.z, x.k, x.d] : ['-', '-', '-']), ...m.rank].join(',');
+  const sig = m => [m.result, ...m.stats.flatMap(x => x ? [x.z, x.k, x.d] : ['-', '-', '-']), ...m.rank, isSolo(m) ? 's' + m.solo : ''].join(',');
   function mergeFeed(feed) {
     if (!feed || !Array.isArray(feed.matches) || document.querySelector('dialog[open]')) return 0;
     let changed = 0;
@@ -501,11 +509,12 @@ window.FH_FEED_INLINE = {"players":[{"name":"Kheri"},{"name":"spanz"}],"matches"
       if (!local) { local = S.matches.find(m => !feedIds.has(m.id) && sig(m) === sig(fm)); if (local) { local.id = fm.id; changed++; } }
       if (local) {
         // A correction from the feed: a higher "rev" overwrites the game's result, scores and ranks.
-        if ((fm.rev || 0) > (local.rev || 0)) { local.result = fm.result; local.stats = fm.stats; local.rank = fm.rank; local.rev = fm.rev; changed++; }
+        if ((fm.rev || 0) > (local.rev || 0)) { local.result = fm.result; local.stats = fm.stats; local.rank = fm.rank; local.rev = fm.rev; if (isSolo(fm)) local.solo = fm.solo; else delete local.solo; changed++; }
         if (local.ts !== fm.ts) { local.ts = fm.ts; changed++; }   // feed time wins, keeps order stable
+        if (isSolo(fm) && local.solo !== fm.solo) { local.solo = fm.solo; changed++; }   // feed marks solo games, even ones saved before solo support
         return;
       }
-      S.matches.push({ id: fm.id, ts: fm.ts, result: fm.result, stats: fm.stats, rank: fm.rank, rev: fm.rev || 0 }); added++;
+      S.matches.push({ id: fm.id, ts: fm.ts, result: fm.result, stats: fm.stats, rank: fm.rank, rev: fm.rev || 0, ...(isSolo(fm) ? { solo: fm.solo } : {}) }); added++;
     });
     if (added || changed) { S.matches.sort((a, b) => a.ts - b.ts); undoSnap = null; save(); render(); }
     return added;
