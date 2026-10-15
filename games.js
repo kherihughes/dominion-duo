@@ -98,6 +98,7 @@ window.FH_FEED = {
     {"id": "g89solowin89", "ts": 1792031413125, "result": "W", "stats": [{"z": 2, "k": 11, "d": 5}, null], "rank": [16, 15], "solo": 0},
     {"id": "g90solowin90", "ts": 1792087875114, "result": "W", "stats": [{"z": 1, "k": 10, "d": 4}, null], "rank": [16, 15], "solo": 0},
     {"id": "g91solowin91", "ts": 1792087875294, "result": "W", "stats": [{"z": 2, "k": 12, "d": 4}, null], "rank": [16, 15], "solo": 0},
-    {"id": "g92solowin92", "ts": 1792088672991, "result": "W", "stats": [{"z": 1, "k": 10, "d": 4}, null], "rank": [17, 15], "solo": 0}
+    {"id": "g92solowin92", "ts": 1792088672991, "result": "W", "stats": [{"z": 1, "k": 10, "d": 4}, null], "rank": [17, 15], "solo": 0},
+    {"id": "g93sololoss93", "ts": 1792092297252, "result": "L", "stats": [{"z": 0, "k": 1, "d": 4}, null], "rank": [17, 15], "solo": 0}
   ]
 };
