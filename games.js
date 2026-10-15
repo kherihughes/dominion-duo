@@ -2,6 +2,7 @@
 // picks them up within ~4 seconds. Keep every id unique. add_game.py also bakes this list into index.html.
 // stats are [you, duo] as {z: zones, k: kills, d: deaths}; rank is the rank AFTER the game for [you, duo].
 // "solo": 0 (you) or 1 (duo) marks a ranked game that player played alone; it is kept out of the duo record and stats.
+// "rp": [you, duo] is the RP inside the division after the game as reported (85 = "85/100"), null = not reported.
 // Rank index: Bronze V..I = 0-4, Silver 5-9, Gold V..I = 10-14, Platinum V..I = 15-19, Diamond 20-24, Master 25, Grand Master 26.
 window.FH_FEED = {
   players: [{ name: "Kheri" }, { name: "spanz" }],
@@ -93,7 +94,7 @@ window.FH_FEED = {
     {"id": "g85solowin85", "ts": 1792027698332, "result": "W", "stats": [{"z": 2, "k": 12, "d": 2}, null], "rank": [16, 15], "solo": 0, "rev": 1},
     {"id": "g86loss86", "ts": 1792028700639, "result": "L", "stats": [{"z": 5, "k": 6, "d": 6}, null], "rank": [15, 15], "rev": 1},
     {"id": "g87solowin87", "ts": 1792029605997, "result": "W", "stats": [{"z": 2, "k": 8, "d": 7}, null], "rank": [16, 15], "solo": 0, "rev": 1},
-    {"id": "g88sololoss88", "ts": 1792030547764, "result": "L", "stats": [{"z": 4, "k": 12, "d": 5}, null], "rank": [15, 15], "solo": 0},
+    {"id": "g88sololoss88", "ts": 1792030547764, "result": "L", "stats": [{"z": 4, "k": 12, "d": 5}, null], "rank": [15, 15], "solo": 0, "rp": [85, null], "rev": 1},
     {"id": "g89solowin89", "ts": 1792031413125, "result": "W", "stats": [{"z": 2, "k": 11, "d": 5}, null], "rank": [16, 15], "solo": 0}
   ]
 };
